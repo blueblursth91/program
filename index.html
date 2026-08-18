@@ -6,51 +6,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Program</title>
   <style>
-    /* Fondo oscuro para que resalte tu texto blanco */
     body {
-      background-color: #111; 
+      background-color: #111; /* Fondo oscuro para ver el texto blanco */
       margin: 0;
-      overflow: hidden;
     }
-
-    /* Es vital que cada letra sea inline-block para que se pueda transformar y mover */
-    .anim-char {
-      display: inline-block;
-      opacity: 0;
-      transform: translateY(30px);
-      white-space: pre; /* Mantiene los espacios que pusiste entre letras */
+    
+    /* Efecto visual opcional para la barra parpadeante de la máquina */
+    .cursor {
+      font-weight: 100;
+      animation: blink 0.7s infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
     }
   </style>
 </head>
 <body>
-  
-  <!-- Añadimos un ID para seleccionarlo fácilmente en JavaScript -->
-  <h1 id="title" style="font-family: 'Roco', sans-serif; color: white; text-align: center; margin-top: 45vh;">H e l l o</h1>
+
+  <!-- El contenedor h1 inicia completamente vacío -->
+  <h1 id="typewriter" style="font-family: 'Roco', sans-serif; color: white; text-align: center; margin-top: 45vh;"><span id="text"></span><span class="cursor">|</span></h1>
 
   <script>
-    const title = document.getElementById('title');
-    
-    // 1. Convertimos el texto en un array de letras y las envolvemos en <span class="anim-char">
-    title.innerHTML = title.textContent
-      .split('')
-      .map(char => `<span class="anim-char">${char}</span>`)
-      .join('');
+    const textContainer = document.getElementById('text');
+    const fullText = "H e l l o"; // El texto exacto con tus espacios
+    let index = 0;
 
-    // 2. Seleccionamos todos los spans creados
-    const chars = document.querySelectorAll('.anim-char');
+    function type() {
+      if (index < fullText.length) {
+        // Añade la letra actual al contenedor
+        textContainer.textContent += fullText.charAt(index);
+        index++;
+        
+        // Controla la velocidad de escritura (150 milisegundos por letra)
+        setTimeout(type, 150); 
+      }
+    }
 
-    // 3. Animamos cada letra con un retraso (delay) progresivo
-    chars.forEach((char, index) => {
-      char.animate([
-        { opacity: 0, transform: 'translateY(40px) scale(0.8)' },
-        { opacity: 1, transform: 'translateY(0px) scale(1)' }
-      ], {
-        duration: 600,
-        delay: index * 80, // 80ms de retraso entre cada letra para el efecto cascada
-        fill: 'forwards',  // Mantiene el texto visible al terminar la animación
-        easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' // Efecto elástico/rebote suave
-      });
-    });
+    // Arranca la animación automáticamente al cargar la página
+    window.onload = type;
   </script>
+
 </body>
 </html>
