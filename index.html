@@ -9,46 +9,71 @@
     body {
       background-color: #111;
       margin: 0;
-      /* Flexbox asegura un centrado absoluto en toda la pantalla */
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
     }
-
-    #typewriter {
+    #my-title {
       font-family: 'Roco', sans-serif;
       color: white;
       text-align: center;
       margin: 0;
-      /* Añadir un ancho mínimo evita saltos visuales raros al escribir */
-      min-width: 300px; 
+      min-width: 400px; 
     }
   </style>
 </head>
 <body>
 
-  <!-- El elemento h1 ahora está limpio, sin cursores ni estilos en línea complejos -->
-  <h1 id="typewriter"></h1>
+  <h1 id="my-title"></h1>
 
   <script>
-    const textContainer = document.getElementById('typewriter');
-    const fullText = "H e l l o";
-    let index = 0;
+    // 1. Una función ultra simple para pausar el tiempo (en segundos)
+    const wait = (seconds) => new Promise(resolve => setTimeout(resolve, seconds * 1000));
 
-    function type() {
-      if (index < fullText.length) {
-        // Inserta el texto directamente sin agregar elementos extra
-        textContainer.textContent += fullText.charAt(index);
-        index++;
-        
-        // Tiempo en milisegundos entre letras
-        setTimeout(type, 180); 
-      }
+    // 2. La función typewriter limpia (solo escribe el texto y avisa cuando termina)
+    function typewriter(elementId, textToType, speed) {
+      return new Promise((resolve) => {
+        const container = document.getElementById(elementId);
+        if (!container) return resolve();
+
+        container.textContent = ""; 
+        let index = 0;
+
+        function nextChar() {
+          if (index < textToType.length) {
+            container.textContent += textToType.charAt(index);
+            index++;
+            setTimeout(nextChar, speed);
+          } else {
+            resolve(); // <- Avisa que terminó de escribir la última letra
+          }
+        }
+        nextChar();
+      });
     }
 
-    // Iniciar la animación al cargar la página
-    window.onload = type;
+    // 3. AQUÍ CONTROLAS TODO EL FLUJO COMO QUIERAS (Sin quemar lógica dentro de las funciones)
+    async function startProgram() {
+      
+      // Escribe el primer texto y espera a que termine
+      await typewriter('my-title', 'H e l l o ?', 150);
+      
+      // ESPERA 2 SEGUNDOS
+      await wait(2);
+      
+      // Ejecuta la función de nuevo con cambios
+      await typewriter('my-title', 'A r e  w e . . .', 100);
+      
+      // ESPERA 3 SEGUNDOS
+      await wait(3);
+      
+      // Ejecuta la función otra vez con cambios
+      await typewriter('my-title', 'C o n n e c t e d ?', 50);
+    }
+
+    // Arranca tu flujo al cargar la página
+    window.onload = startProgram;
   </script>
 
 </body>
