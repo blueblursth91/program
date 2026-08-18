@@ -7,42 +7,47 @@
   <title>Program</title>
   <style>
     body {
-      background-color: #111; /* Fondo oscuro para ver el texto blanco */
+      background-color: #111;
       margin: 0;
+      /* Flexbox asegura un centrado absoluto en toda la pantalla */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-    
-    /* Efecto visual opcional para la barra parpadeante de la máquina */
-    .cursor {
-      font-weight: 100;
-      animation: blink 0.7s infinite;
-    }
-    @keyframes blink {
-      50% { opacity: 0; }
+
+    #typewriter {
+      font-family: 'Roco', sans-serif;
+      color: white;
+      text-align: center;
+      margin: 0;
+      /* Añadir un ancho mínimo evita saltos visuales raros al escribir */
+      min-width: 300px; 
     }
   </style>
 </head>
 <body>
 
-  <!-- El contenedor h1 inicia completamente vacío -->
-  <h1 id="typewriter" style="font-family: 'Roco', sans-serif; color: white; text-align: center; margin-top: 45vh;"><span id="text"></span><span class="cursor">|</span></h1>
+  <!-- El elemento h1 ahora está limpio, sin cursores ni estilos en línea complejos -->
+  <h1 id="typewriter">H E L L O</h1>
 
   <script>
-    const textContainer = document.getElementById('text');
-    const fullText = "H e l l o"; // El texto exacto con tus espacios
+    const textContainer = document.getElementById('typewriter');
+    const fullText = "H e l l o";
     let index = 0;
 
     function type() {
       if (index < fullText.length) {
-        // Añade la letra actual al contenedor
+        // Inserta el texto directamente sin agregar elementos extra
         textContainer.textContent += fullText.charAt(index);
         index++;
         
-        // Controla la velocidad de escritura (150 milisegundos por letra)
-        setTimeout(type, 150); 
+        // Tiempo en milisegundos entre letras
+        setTimeout(type, 180); 
       }
     }
 
-    // Arranca la animación automáticamente al cargar la página
+    // Iniciar la animación al cargar la página
     window.onload = type;
   </script>
 
