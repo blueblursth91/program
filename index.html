@@ -5,8 +5,52 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Program</title>
+  <style>
+    /* Fondo oscuro para que resalte tu texto blanco */
+    body {
+      background-color: #111; 
+      margin: 0;
+      overflow: hidden;
+    }
+
+    /* Es vital que cada letra sea inline-block para que se pueda transformar y mover */
+    .anim-char {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(30px);
+      white-space: pre; /* Mantiene los espacios que pusiste entre letras */
+    }
+  </style>
 </head>
 <body>
-  <h1 style="font-family: 'Roco', sans-serif; color: white; text-align: center; margin-top: 45vh;">H e l l o</h1>
+  
+  <!-- Añadimos un ID para seleccionarlo fácilmente en JavaScript -->
+  <h1 id="title" style="font-family: 'Roco', sans-serif; color: white; text-align: center; margin-top: 45vh;">H e l l o</h1>
+
+  <script>
+    const title = document.getElementById('title');
+    
+    // 1. Convertimos el texto en un array de letras y las envolvemos en <span class="anim-char">
+    title.innerHTML = title.textContent
+      .split('')
+      .map(char => `<span class="anim-char">${char}</span>`)
+      .join('');
+
+    // 2. Seleccionamos todos los spans creados
+    const chars = document.querySelectorAll('.anim-char');
+
+    // 3. Animamos cada letra con un retraso (delay) progresivo
+    chars.forEach((char, index) => {
+      char.animate([
+        { opacity: 0, transform: 'translateY(40px) scale(0.8)' },
+        { opacity: 1, transform: 'translateY(0px) scale(1)' }
+      ], {
+        duration: 600,
+        delay: index * 80, // 80ms de retraso entre cada letra para el efecto cascada
+        fill: 'forwards',  // Mantiene el texto visible al terminar la animación
+        easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' // Efecto elástico/rebote suave
+      });
+    });
+  </script>
 </body>
 </html>
